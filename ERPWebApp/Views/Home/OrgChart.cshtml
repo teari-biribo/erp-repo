@@ -1,0 +1,50 @@
+@{
+    ViewData["Title"] = "Organizational Chart";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Organizational Chart</h1>
+</div>
+
+<div id="orgChartDiv"></div>
+
+@section Scripts {
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', { 'packages': ['orgchart'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Name');
+            data.addColumn('string', 'ReportsTo');
+            data.addColumn('string', 'Tooltip');
+
+            $.ajax({
+                url: '/api/Employee',
+                dataType: 'json',
+                success: function (employees) {
+                    var chartData = [];
+                    employees.forEach(function (employee) {
+                        chartData.push([
+                            {
+                                v: employee.id.toString(),
+                                f: '<div>' + employee.name + '<br><span>' + employee.role + '</span></div>'
+                            },
+                            (employee.reportsToId ? employee.reportsToId.toString() : ''),
+                            employee.name + ' (' + employee.role + ')'
+                        ]);
+                    });
+
+                    data.addRows(chartData);
+
+                    var chart = new google.visualization.OrgChart(document.getElementById('orgChartDiv'));
+                    chart.draw(data, { 'allowHtml': true });
+                },
+                error: function (xhr, status, error) {
+                    console.error("Failed to fetch employee data: " + error);
+                }
+            });
+        }
+    </script>
+}
