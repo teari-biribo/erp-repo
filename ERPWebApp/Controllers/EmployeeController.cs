@@ -22,49 +22,75 @@ public class EmployeeController : ControllerBase
     [HttpGet("{id}")]
     public async Task<Employee?> GetById(int id)
     {
-        return await _dbContext.Employees.FirstOrDefaultAsync(x => x.Id == id);
+        return await _dbContext.Employees.FirstOrDefaultAsync(x => x.EmployeeId == id);
     }
 
+    //create employee
     [HttpPost]
-    public async Task<ActionResult> Create([FromBody] Employee employee)
-    {
-        if (string.IsNullOrWhiteSpace(employee.Name) ||
-            string.IsNullOrWhiteSpace(employee.Email) ||
-            string.IsNullOrWhiteSpace(employee.Password)
-        )
+    // public async Task<ActionResult> Create([FromBody] Employee employee)
+    // {
+    //     if (string.IsNullOrWhiteSpace(employee.FirstName) ||
+    //         string.IsNullOrWhiteSpace(employee.Email) ||
+    //         string.IsNullOrWhiteSpace(employee.Password)
+    //     )
 
-        {
-            return BadRequest("Invalid Request");
-        }
+    //     {
+    //         return BadRequest("Invalid Request");
+    //     }
 
-        //implement code to hash password
+    //     //implement code to hash password
 
-        await _dbContext.Employees.AddAsync(employee);
-        await _dbContext.SaveChangesAsync();
+    //     await _dbContext.Employees.AddAsync(employee);
+    //     await _dbContext.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetById), new { id = employee.Id }, employee);
-    }
+    //     return CreatedAtAction(nameof(GetById), new { id = employee.Id }, employee);
+    // }
 
-    [HttpPut]
-    public async Task<ActionResult> Update([FromBody] Employee employee)
-    {
-        if (employee.Id == 0 ||
-            string.IsNullOrWhiteSpace(employee.Name) ||
-            string.IsNullOrWhiteSpace(employee.Email) ||
-            string.IsNullOrWhiteSpace(employee.Password)
-        )
+    //create role
+    // [HttpPost]
+    // public async Task<ActionResult> CreateRole([FromBody] Employee employee)
+    // {
+    //     if (string.IsNullOrWhiteSpace(employee.Name) ||
+    //         string.IsNullOrWhiteSpace(employee.Email) ||
+    //         string.IsNullOrWhiteSpace(employee.Password)
+    //     )
 
-        {
-            return BadRequest("Invalid Request");
-        }
+    //     {
+    //         return BadRequest("Invalid Request");
+    //     }
 
-        //implement code to hash new password
+    //     await _dbContext.Employees.AddAsync(employee);
+    //     await _dbContext.SaveChangesAsync();
 
-        _dbContext.Employees.Update(employee);
-        await _dbContext.SaveChangesAsync();
+    //     return CreatedAtAction(nameof(GetById), new { id = employee.Id }, employee);
 
-        return Ok();
-    }
+    //     // _context.Employees.Add(employee);
+    //     // await _context.SaveChangesAsync();
+
+    //     // // Return the newly created employee with its new ID
+    //     // return CreatedAtAction(nameof(GetEmployees), new { id = employee.Id }, employee);
+    // }
+
+    // [HttpPut]
+    // public async Task<ActionResult> Update([FromBody] Employee employee)
+    // {
+    //     if (
+    //         string.IsNullOrWhiteSpace(employee.Name) ||
+    //         string.IsNullOrWhiteSpace(employee.Email) ||
+    //         string.IsNullOrWhiteSpace(employee.Password)
+    //     )
+
+    //     {
+    //         return BadRequest("Invalid Request");
+    //     }
+
+    //     //implement code to hash new password
+
+    //     _dbContext.Employees.Update(employee);
+    //     await _dbContext.SaveChangesAsync();
+
+    //     return Ok();
+    // }
 
     [HttpDelete("{id}")]
     public async Task<ActionResult> Delete(int id)

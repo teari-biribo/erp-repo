@@ -7,22 +7,21 @@ using System.ComponentModel.DataAnnotations.Schema;
 public class Employee
 {
     [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    [Column("id")]
-    public int Id { get; set; }
+    public int EmployeeId { get; set; }
 
-    [Column("name")]
-    public string? Name { get; set; }
+    [Required]
+    public required string FirstName { get; set; }
 
-    [Column("email")]
-    public string? Email { get; set; }
+    [Required]
+    public required string LastName { get; set; }
 
-    [Column("password")]
-    public string? Password { get; set; }
+    public int CurrentRoleId { get; set; }
+    public Role? CurrentRole { get; set; }
 
-    [Column("role")]
-    public string? Role { get; set; }
+    // Navigation property for employement history
+    public ICollection<EmployeeRoleHistory>? RoleHistory { get; set; }
 
-    [Column("reports_to_id")]
-    public int? ReportsToId { get; set; }
+    // Many-to-One: Employee -> Role
+    public int RoleId { get; set; }
+    public Role? Role { get; set; }
 }

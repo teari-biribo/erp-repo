@@ -1,0 +1,19 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+[Table("employee_role_history")]
+
+public class EmployeeRoleHistory
+{
+    [Key]
+    public int EmployeeRoleHistoryId { get; set; }
+
+    public int EmployeeId { get; set; }
+    public Employee? Employee { get; set; }
+
+    public int RoleId { get; set; }
+    public Role? Role { get; set; }
+
+    public DateTime StartDate { get; set; }
+    public DateTime? EndDate { get; set; } // Nullable, as the current role has no end date yet
+}
