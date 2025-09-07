@@ -8,7 +8,9 @@ builder.Services.AddControllersWithViews();
 // Adding db context
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DbConnection"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DbConnection"))
+    .LogTo(Console.WriteLine, LogLevel.Information) // Log all Information-level events to the console
+    .EnableSensitiveDataLogging(); // Include sensitive data (like key values) in logs
 });
 
 var app = builder.Build();

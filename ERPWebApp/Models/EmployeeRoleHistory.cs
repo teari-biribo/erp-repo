@@ -14,6 +14,6 @@ public class EmployeeRoleHistory
     public int RoleId { get; set; }
     public Role? Role { get; set; }
 
-    public DateTime StartDate { get; set; }
+    public DateTime StartDate { get; set; } = DateTime.SpecifyKind(new DateTime(2020, 1, 6), DateTimeKind.Utc);
     public DateTime? EndDate { get; set; } // Nullable, as the current role has no end date yet
 }

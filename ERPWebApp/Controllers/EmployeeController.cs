@@ -13,10 +13,50 @@ public class EmployeeController : ControllerBase
         _dbContext = dbContext;
     }
 
+    // [HttpGet]
+    // public async Task<List<Employee>> Get()
+    // {
+    //     return await _dbContext.Employees.ToListAsync();
+    // }
+
     [HttpGet]
-    public async Task<List<Employee>> Get()
+    public async Task<ActionResult<OrgChartDto>> GetOrgChartData()
     {
-        return await _dbContext.Employees.ToListAsync();
+        // Fetch all employees and their current roles
+        var employees = await _dbContext.Employees
+            .Include(e => e.CurrentRole)
+            .ToListAsync();
+
+        // Fetch all reporting relationships
+        var reporting = await _dbContext.RoleReportings.ToListAsync();
+
+        // Create the NodeDataArray
+        var nodeDataArray = employees.Select(e => new NodeDataDto
+        {
+            Key = e.EmployeeId,
+            Name = $"{e.FirstName} {e.LastName}",
+            Title = e.CurrentRole.Title
+        }).ToList();
+
+        // Create the LinkDataArray
+        var linkDataArray = reporting.Select(r => new LinkDataDto
+        {
+            From = employees.First(e => e.CurrentRoleId == r.ReportsToId).EmployeeId,
+            To = employees.First(e => e.CurrentRoleId == r.DirectReportId).EmployeeId
+        }).ToList();
+
+        // Handle multiple roots: You'll need to decide how to handle multiple trees.
+        // For a single chart, you would filter to a single root.
+        // For multiple charts, you could create a different endpoint.
+        // The below approach assumes a single connected component.
+
+        var chartData = new OrgChartDto
+        {
+            NodeDataArray = nodeDataArray,
+            LinkDataArray = linkDataArray
+        };
+
+        return Ok(chartData);
     }
 
     [HttpGet("{id}")]
@@ -26,7 +66,7 @@ public class EmployeeController : ControllerBase
     }
 
     //create employee
-    [HttpPost]
+    //HttpPost]
     // public async Task<ActionResult> Create([FromBody] Employee employee)
     // {
     //     if (string.IsNullOrWhiteSpace(employee.FirstName) ||
@@ -92,17 +132,17 @@ public class EmployeeController : ControllerBase
     //     return Ok();
     // }
 
-    [HttpDelete("{id}")]
-    public async Task<ActionResult> Delete(int id)
-    {
-        var employee = await GetById(id);
+    // [HttpDelete("{id}")]
+    // public async Task<ActionResult> Delete(int id)
+    // {
+    //     var employee = await GetById(id);
 
-        if (employee is null)
-            return NotFound();
+    //     if (employee is null)
+    //         return NotFound();
 
-        _dbContext.Employees.Remove(employee);
-        await _dbContext.SaveChangesAsync();
+    //     _dbContext.Employees.Remove(employee);
+    //     await _dbContext.SaveChangesAsync();
 
-        return Ok();
-    }
+    //     return Ok();
+    // }
 }
