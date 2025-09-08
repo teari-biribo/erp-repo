@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 public class OrgUnit
 {
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int UnitId { get; set; }
 
     [Required]

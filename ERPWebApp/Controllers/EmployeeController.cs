@@ -23,40 +23,42 @@ public class EmployeeController : ControllerBase
     public async Task<ActionResult<OrgChartDto>> GetOrgChartData()
     {
         // Fetch all employees and their current roles
-        var employees = await _dbContext.Employees
-            .Include(e => e.CurrentRole)
-            .ToListAsync();
+        var employees = await _dbContext.Employees.Include(e => e.CurrentRole).ToListAsync();
 
         // Fetch all reporting relationships
-        var reporting = await _dbContext.RoleReportings.ToListAsync();
+        var roleReportings = await _dbContext.RoleReportings.ToListAsync();
 
         // Create the NodeDataArray
-        var nodeDataArray = employees.Select(e => new NodeDataDto
+        var nodeDataArray = new List<NodeDataDto>();
+
+        foreach (var employee in employees)
         {
-            Key = e.EmployeeId,
-            Name = $"{e.FirstName} {e.LastName}",
-            Title = e.CurrentRole.Title
-        }).ToList();
+            // Find the role this employee reports to
+            var reportsToRoleId = roleReportings
+                .FirstOrDefault(rr => rr.DirectReportId == employee.CurrentRoleId)?
+                .ReportsToId;
 
-        // Create the LinkDataArray
-        var linkDataArray = reporting.Select(r => new LinkDataDto
-        {
-            From = employees.First(e => e.CurrentRoleId == r.ReportsToId).EmployeeId,
-            To = employees.First(e => e.CurrentRoleId == r.DirectReportId).EmployeeId
-        }).ToList();
+            // Find the employee who holds the reporting role
+            var parentEmployee = employees
+                .FirstOrDefault(e => e.CurrentRoleId == reportsToRoleId);
 
-        // Handle multiple roots: You'll need to decide how to handle multiple trees.
-        // For a single chart, you would filter to a single root.
-        // For multiple charts, you could create a different endpoint.
-        // The below approach assumes a single connected component.
+            var nodeData = new NodeDataDto
+            {
+                Key = employee.EmployeeId,
+                Name = $"{employee.FirstName} {employee.LastName}",
+                Title = employee.CurrentRole.Title
+            };
 
-        var chartData = new OrgChartDto
-        {
-            NodeDataArray = nodeDataArray,
-            LinkDataArray = linkDataArray
-        };
+            // Only add the Parent property if a parent employee exists
+            if (parentEmployee != null)
+            {
+                nodeData.Parent = parentEmployee.EmployeeId;
+            }
 
-        return Ok(chartData);
+            nodeDataArray.Add(nodeData);
+        }
+
+        return Ok(nodeDataArray);
     }
 
     [HttpGet("{id}")]

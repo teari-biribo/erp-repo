@@ -12,6 +12,11 @@
 # dotenv files
 .env
 
+ERPWebApp/bin/Debug/net9.0/ERPWebApp.pdb
+ERPWebApp/obj/Debug/net9.0/ref/ERPWebApp.dll
+ERPWebApp/obj/Debug/net9.0/ERPWebApp.AssemblyInfoInputs.cache
+ERPWebApp/obj/Debug/net9.0/ERPWebApp.csproj.CoreCompileInputs.cache
+
 # User-specific files
 *.rsuser
 *.suo

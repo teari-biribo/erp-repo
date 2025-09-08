@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 public class Role
 {
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int RoleId { get; set; }
 
     [Required]

@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 public class EmployeeRoleHistory
 {
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int EmployeeRoleHistoryId { get; set; }
 
     public int EmployeeId { get; set; }

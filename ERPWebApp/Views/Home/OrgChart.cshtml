@@ -510,7 +510,6 @@
         } *@
 
             async function load() {
-                // *** Replace with the actual URL of your API endpoint ***
                 const apiEndpoint = 'http://localhost:5107/api/Employee';
 
                 try {
@@ -520,9 +519,12 @@
                     }
                     const employees = await response.json();
 
-                    // Ensure the data has the correct format for a GoJS TreeModel
-                    // This expects your API to return an array of objects like:
-                    // [{"key": 1, "name": "...", "parent": ...}, ...]
+                    // Assigning 'undefined' to null parent nodes
+                    employees.forEach(node => {
+                        if (node.parent === null) {
+                            node.parent = undefined;
+                        }
+                    });
 
                     const modelData = {
                         "class": "go.TreeModel",
