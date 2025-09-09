@@ -195,3 +195,5 @@
 /Users/teari/Documents/github.nosync/OneCarpentersERP/erp-repo/ERPWebApp/bin/Debug/net9.0/tr/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 /Users/teari/Documents/github.nosync/OneCarpentersERP/erp-repo/ERPWebApp/bin/Debug/net9.0/zh-Hans/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 /Users/teari/Documents/github.nosync/OneCarpentersERP/erp-repo/ERPWebApp/bin/Debug/net9.0/zh-Hant/Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+/Users/teari/Documents/github.nosync/OneCarpentersERP/erp-repo/ERPWebApp/bin/Debug/net9.0/AutoMapper.dll
+/Users/teari/Documents/github.nosync/OneCarpentersERP/erp-repo/ERPWebApp/bin/Debug/net9.0/AutoMapper.Extensions.Microsoft.DependencyInjection.dll

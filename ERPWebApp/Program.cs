@@ -13,6 +13,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     .EnableSensitiveDataLogging(); // Include sensitive data (like key values) in logs
 });
 
+// Register repositories and services
+builder.Services.AddScoped<IOrgUnitRepository, OrgUnitRepository>();
+builder.Services.AddScoped<IOrgUnitService, OrgUnitService>();
+
+// Automapper config
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
