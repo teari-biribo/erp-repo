@@ -1,5 +1,4 @@
 
-
 public interface IOrgUnitService
 {
     Task<IEnumerable<OrgUnitDto>> GetAllAsync();

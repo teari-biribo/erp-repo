@@ -16,6 +16,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Register repositories and services
 builder.Services.AddScoped<IOrgUnitRepository, OrgUnitRepository>();
 builder.Services.AddScoped<IOrgUnitService, OrgUnitService>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+// builder.Services.AddScoped(typeof(ICRUDRepository<>), typeof(CRUDRepository<>));
+// builder.Services.AddScoped<IOrgUnitService, OrgUnitService>();
+// builder.Services.AddScoped<IRoleService, RoleService>();
 
 // Automapper config
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

@@ -1,4 +1,4 @@
-// File: DTOs/OrgUnitDto.cs
+
 public class OrgUnitDto
 {
     public int UnitId { get; set; }
