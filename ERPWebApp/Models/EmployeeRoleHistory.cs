@@ -1,8 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-[Table("employee_role_history")]
-
 public class EmployeeRoleHistory
 {
     [Key]

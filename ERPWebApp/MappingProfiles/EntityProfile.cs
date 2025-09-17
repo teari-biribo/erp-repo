@@ -6,5 +6,7 @@ public class EntityProfile : Profile
     {
         CreateMap<OrgUnit, OrgUnitDto>().ReverseMap();
         CreateMap<Role, RoleDto>().ReverseMap();
+        CreateMap<Employee, EmployeeDto>().ReverseMap();
+
     }
 }

@@ -1,8 +1,11 @@
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Roles = "HR Admin, HR Manager")]
+
 public class RoleController : ControllerBase
 {
     private readonly IRoleService _service;
