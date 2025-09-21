@@ -10,10 +10,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.AspNetCore.Identity.UI.UIFrameworkAttribute("Bootstrap5")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("ERPWebApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+47aee11f53c120e2834f16905da0641c4ea42e38")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d4e33c248b6cd598ccd1986b09a5dcc1efbb821d")]
 [assembly: System.Reflection.AssemblyProductAttribute("ERPWebApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ERPWebApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

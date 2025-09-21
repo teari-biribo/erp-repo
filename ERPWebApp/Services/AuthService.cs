@@ -1,40 +1,50 @@
 
-using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 
 public class AuthService : IAuthService
 {
     private readonly UserManager<ApplicationUser> _userManager;
-    // private readonly SignInManager<ApplicationUser> _signInManager;
-
     private readonly RoleManager<IdentityRole> _roleManager;
-    private readonly IConfiguration _config;
+    private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
 
     public AuthService(
         UserManager<ApplicationUser> userManager,
         RoleManager<IdentityRole> roleManager,
-        // SignInManager<ApplicationUser> signInManager,
-        IConfiguration config)
+        SignInManager<ApplicationUser> signInManager,
+        IHttpContextAccessor httpContextAccessor)
     {
         _userManager = userManager;
         _roleManager = roleManager;
-        // _signInManager = signInManager;
-        _config = config;
+        _signInManager = signInManager;
+        _httpContextAccessor = httpContextAccessor;
     }
 
-    public async Task<string?> LoginAsync(LoginDto loginDto)
+    public async Task<(bool Success, string Message)> LoginAsync(LoginDto loginDto)
     {
         var user = await _userManager.FindByEmailAsync(loginDto.Email);
-        if (user == null || !await _userManager.CheckPasswordAsync(user, loginDto.Password))
+        if (user == null)
         {
-            return null;
+            return (false, "Invalid login attempt.");
         }
 
-        var roles = await _userManager.GetRolesAsync(user);
-        return CreateToken(user, roles);
+        var result = await _signInManager.PasswordSignInAsync(
+            user,
+            loginDto.Password,
+            isPersistent: loginDto.RememberMe,
+            lockoutOnFailure: false);
+
+        if (result.Succeeded)
+        {
+            await _signInManager.SignInAsync(user, isPersistent: loginDto.RememberMe);
+            return (true, "Login successful.");
+        }
+
+        return (false, "Invalid login attempt.");
     }
 
     public async Task<(bool Success, string Message)> RegisterAsync(RegisterDto registerDto)
@@ -68,31 +78,8 @@ public class AuthService : IAuthService
         return (true, $"User '{registerDto.Email}' registered successfully with role '{role}'.");
     }
 
-    private string CreateToken(ApplicationUser user, IList<string> roles)
+    public async Task LogoutAsync()
     {
-        var authClaims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Name, user.UserName!),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-        };
-
-        foreach (var role in roles)
-        {
-            authClaims.Add(new Claim(ClaimTypes.Role, role));
-        }
-
-        var jwtSettings = _config.GetSection("JwtConfig");
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-        var token = new JwtSecurityToken(
-            issuer: jwtSettings["Issuer"],
-            audience: jwtSettings["Audience"],
-            expires: DateTime.UtcNow.AddMinutes(Convert.ToDouble(jwtSettings["TokenValidityMins"])),
-            claims: authClaims,
-            signingCredentials: creds
-        );
-
-        return new JwtSecurityTokenHandler().WriteToken(token);
+        await _signInManager.SignOutAsync();
     }
 }

@@ -58,7 +58,7 @@ public class EmployeeController : ControllerBase
     // }
 
     [HttpGet("orgchart")]
-    [Authorize(Roles = "HR Admin,HR Manager,Employee")]
+    [Authorize]
     public async Task<ActionResult<OrgChartDto>> GetOrgChartData()
     {
         var orgChart = await _service.GetOrgChartDataAsync();

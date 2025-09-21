@@ -2,9 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-[Route("api/[controller]")]
-[ApiController]
-public class AuthController : ControllerBase
+[Route("Auth")]
+public class AuthController : Controller
 {
     private readonly IAuthService _authService;
 
@@ -13,26 +12,69 @@ public class AuthController : ControllerBase
         _authService = authService;
     }
 
-    [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginDto loginDto)
+    [HttpGet("Login")]
+    public IActionResult Login(string? returnUrl = null)
     {
-        var token = await _authService.LoginAsync(loginDto);
-        if (token == null)
-            return Unauthorized("Invalid login attempt.");
-
-        return Ok(new { Token = token });
+        ViewData["ReturnUrl"] = returnUrl;
+        return View(); // Renders Login.cshtml
     }
 
-    [HttpPost("register")]
+    [HttpPost("Login")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Login([FromForm] LoginDto loginDto, string? returnUrl = null)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(loginDto);
+        }
+
+        var (success, message) = await _authService.LoginAsync(loginDto);
+        if (success)
+        {
+            // Redirect to requested URL or default Home
+            return Redirect(returnUrl ?? Url.Action("Index", "Home")!);
+        }
+
+        ModelState.AddModelError(string.Empty, message);
+        return View(loginDto);
+    }
+
+    [HttpGet("Register")]
     [Authorize(Roles = "HR Admin,HR Manager")]
-    public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
+    public IActionResult Register()
     {
-        var (success, message) = await _authService.RegisterAsync(registerDto);
-        if (!success)
-            return BadRequest(message);
-
-        return Ok(new { message });
+        return View();
     }
 
+    [HttpPost("Register")]
+    [Authorize(Roles = "HR Admin,HR Manager")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Register([FromForm] RegisterDto registerDto)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(registerDto);
+        }
 
+        var (success, message) = await _authService.RegisterAsync(registerDto);
+        if (success)
+        {
+            TempData["SuccessMessage"] = message;
+            return RedirectToAction("Login", "Auth");
+        }
+
+        ModelState.AddModelError(string.Empty, message);
+        return View(registerDto);
+    }
+
+    [HttpPost("Logout")]
+    [ValidateAntiForgeryToken]
+    public async Task<ActionResult> Logout()
+    {
+        await _authService.LogoutAsync();
+        return RedirectToAction("Login", "Auth");
+    }
+
+    [HttpGet("AccessDenied")]
+    public IActionResult AccessDenied() => View();
 }

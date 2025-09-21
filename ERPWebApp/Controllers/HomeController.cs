@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ERPWebApp.Controllers;
 
-[Authorize(Roles = "HR Admin,HR Manager, Employee")]
+[Authorize]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;

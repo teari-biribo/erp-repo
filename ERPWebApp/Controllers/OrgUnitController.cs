@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
@@ -8,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 public class OrgUnitController : ControllerBase
 {
     private readonly IOrgUnitService _service;
-    // private readonly UserManager<IdentityUser> _userManager;
     public OrgUnitController(IOrgUnitService service)
     {
         _service = service;
