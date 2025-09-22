@@ -1,4 +1,3 @@
-@* TODO: Fix Mapping of Employee JSON Data to Chart UI (check the load() function)*@
 @{
     ViewData["Title"] = "Organizational Chart";
 }
@@ -510,7 +509,7 @@
         } *@
 
             async function load() {
-                const apiEndpoint = 'http://localhost:5107/api/Employee';
+                const apiEndpoint = 'http://localhost:5107/api/employee/orgchart';
 
                 try {
                     const response = await fetch(apiEndpoint);
@@ -531,14 +530,12 @@
                         "nodeDataArray": employees
                     };
 
-                    // Assuming `myDiagram` is defined elsewhere in your code
                     myDiagram.model = go.Model.fromJson(modelData);
 
                     console.log("Successfully loaded employee data from API.");
 
                 } catch (error) {
                     console.error('Failed to load employee data:', error);
-                    // You could display an error message to the user here
                 }
             }
 

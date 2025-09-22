@@ -1,7 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
-[Table("role_reporting")]
-
 public class RoleReporting
 {
     [ForeignKey("DirectReport")]

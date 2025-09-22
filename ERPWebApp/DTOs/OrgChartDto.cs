@@ -6,8 +6,8 @@ public class OrgChartDto
 public class NodeDataDto
 {
     public int Key { get; set; } // The ID of the node (EmployeeId)
-    public string Name { get; set; } // The display name of the employee
-    public string Title { get; set; } // The employee's role title
+    public string Name { get; set; } = string.Empty;// The display name of the employee
+    public string Title { get; set; } = string.Empty; // The employee's role title
     public int? Parent { get; set; } // The manager Id of the employee
 
 }

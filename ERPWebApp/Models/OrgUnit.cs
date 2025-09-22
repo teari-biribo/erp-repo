@@ -1,8 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-[Table("organizational_unit")]
-
 public class OrgUnit
 {
     [Key]

@@ -1,9 +1,16 @@
+
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
+    // public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+    // {
+    // }
+
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
+
     }
 
     public DbSet<Employee> Employees { get; set; }
@@ -14,6 +21,15 @@ public class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+
+        // Relationship between ApplicationUser and Employee
+        modelBuilder.Entity<ApplicationUser>()
+            .HasOne(u => u.Employee)
+            .WithMany()
+            .HasForeignKey(u => u.EmployeeId)
+            .OnDelete(DeleteBehavior.SetNull);
+
         // Many-to-many relationship for Role Reporting
         modelBuilder.Entity<RoleReporting>()
             .HasKey(rr => new { rr.DirectReportId, rr.ReportsToId });
@@ -99,8 +115,8 @@ public class ApplicationDbContext : DbContext
             new Role { RoleId = 16, Title = "Parts Cadet Suva", OrgUnitId = 5 }
         );
 
-        //------MIGRATION 2--------
-        // 3. Seed Employees (requires RoleId, which is now available)
+        // //------MIGRATION 2--------
+        // 3. Seed Employees (requires RoleId - ensure orgunits and roles is already seeded)
         modelBuilder.Entity<Employee>().HasData(
             new Employee { EmployeeId = 1, FirstName = "Alice", LastName = "Smith", CurrentRoleId = 1, RoleId = 1 },
             new Employee { EmployeeId = 2, FirstName = "Bob", LastName = "Johnson", CurrentRoleId = 2, RoleId = 2 },
@@ -151,6 +167,5 @@ public class ApplicationDbContext : DbContext
             new EmployeeRoleHistory { EmployeeRoleHistoryId = 15, EmployeeId = 15, RoleId = 15, StartDate = new DateTime(2022, 9, 6) },
             new EmployeeRoleHistory { EmployeeRoleHistoryId = 16, EmployeeId = 16, RoleId = 16, StartDate = new DateTime(2021, 9, 6) }
         );
-        base.OnModelCreating(modelBuilder);
     }
 }
