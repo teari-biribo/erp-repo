@@ -51,7 +51,7 @@ public class EmployeeService : IEmployeeService
         return true;
     }
 
-    public async Task<OrgChartDto> GetOrgChartDataAsync()
+    public async Task<List<NodeDataDto>> GetOrgChartDataAsync()
     {
         var employees = (await _repository.GetAllWithRolesAsync()).ToList();
         var roleReportings = (await _repository.GetAllRoleReportingsAsync()).ToList();
@@ -84,7 +84,8 @@ public class EmployeeService : IEmployeeService
             nodeDataArray.Add(nodeData);
         }
 
-        return new OrgChartDto { NodeDataArray = nodeDataArray };
+        return nodeDataArray;
+
     }
 
     // Reuse old UpdateEmployeeRoleAsync but keep it inside service

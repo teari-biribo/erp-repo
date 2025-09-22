@@ -1,15 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <body>
-<script src="https://cdn.jsdelivr.net/npm/gojs@3.0.26/release/go-debug.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gojs@3.0.26/release/go.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-
+<p>
+  This is a minimalist HTML and JavaScript skeleton of the GoJS Sample
+  <a href="https://gojs.net/latest/samples/orgChartEditor.html">orgChartEditor.html</a>. It was automatically generated from a button on the sample page,
+  and does not contain the full HTML. It is intended as a starting point to adapt for your own usage.
+  For many samples, you may need to inspect the
+  <a href="https://github.com/NorthwoodsSoftware/GoJS/blob/master/samples/orgChartEditor.html">full source on Github</a>
+  and copy other files or scripts.
+</p>
 <div id="allSampleContent" class="p-4 w-full">
+          
+            
+            
+
 
 <link href="https://fonts.googleapis.com/css?family=Inter:400,500,600&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
-
-<!-- figure out a way to move this code to the css folder -->
 <style>
   :modal {
     padding: 2rem;
@@ -535,6 +544,72 @@
     <div id="myInspector"></div>
   </div>
   <p><button id="zoomToFit">Zoom to Fit</button> <button id="centerRoot">Center on root</button></p>
+  <p>
+    This editable organizational chart sample color-codes the Nodes according to the tree level in
+    the hierarchy.
+  </p>
+  <p>
+    Select a node to edit its data values. This sample uses the
+    <a href="../samples/DataInspector.html">Data Inspector</a> extension to display and modify Part
+    data. Because this simple app is part of a static web site, there is no way to upload a
+    photograph for a person.
+  </p>
+  <p>
+    Double click in the diagram background to add a new boss. That uses the
+    <a>ClickCreatingTool</a> with a custom <a>ClickCreatingTool.insertPart</a> to scroll to the new
+    node and start editing the <a>TextBlock</a> for its name .
+  </p>
+  <p>
+    Drag a node onto another in order to change relationships, if permitted. Right-click or tap-hold
+    a Node to bring up a context menu that allows you to:
+  </p>
+
+  <ul>
+    <li>Add Employee - add a new person as a direct report to this person</li>
+    <li>Vacate Position - remove the information specific to the current person in that role</li>
+    <li>
+      Remove Role - removes the person entirely and changes the direct reports to report to the
+      (former) boss
+    </li>
+    <li>Remove Department - removes the person and whole subtree</li>
+  </ul>
+  <p>
+    To learn how to build an org chart from scratch with GoJS, see the
+    <a href="../learn/index.html">Getting Started tutorial</a>.
+  </p>
+  <p>This sample is set to the dark theme by default.</p>
+  <p>
+    If you want to have some "assistant" nodes on the side, above the regular reports, see the
+    <a href="orgChartAssistants.html">Org Chart Assistants</a> sample, which is a more simply styled
+    version of this sample that uses a custom <a>TreeLayout</a> to position "assistants" that way.
+  </p>
+  <div>
+    <div>
+      <button id="SaveButton" onclick="save()">Save</button>
+      <button onclick="load()">Load</button>
+      Diagram Model saved in JSON format:
+    </div>
+    <textarea id="mySavedModel" style="width: 100%; height: 270px">{ "class": "go.TreeModel",
+  "nodeDataArray": [
+{"key":1, "name":"Stella Payne Diaz", "title":"CEO", "dept": "Management", "pic":"1.jpg", "email": "sdiaz@example.com", "phone": "(234) 555-6789" },
+{"key":2, "name":"Luke Warm", "title":"VP Marketing/Sales", "dept": "Management", "pic":"2.jpg", "email": "lwarm@example.com", "phone": "(234) 555-6789", "parent":1},
+{"key":3, "name":"Meg Meehan Hoffa", "title":"Sales", "dept": "Sales", "pic":"3.jpg", "email": "mhoffa@example.com", "phone": "(234) 555-6789", "parent":2},
+{"key":4, "name":"Peggy Flaming", "title":"VP Engineering", "dept": "Management", "pic":"4.jpg", "email": "pflaming@example.com", "phone": "(234) 555-6789", "parent":1},
+{"key":5, "name":"Saul Wellingood", "title":"Manufacturing", "dept": "Production", "pic":"5.jpg", "email": "swellingood@example.com", "phone": "(234) 555-6789", "parent":4},
+{"key":6, "name":"Al Ligori", "title":"Marketing", "dept": "Marketing", "pic":"6.jpg", "email": "aligori@example.com", "phone": "(234) 555-6789", "parent":2},
+{"key":7, "name":"Dot Stubadd", "title":"Sales Rep", "dept": "Sales", "pic":"7.jpg", "email": "dstubadd@example.com", "phone": "(234) 555-6789", "parent":3},
+{"key":8, "name":"Les Ismore", "title":"Project Mgr", "dept": "Production", "pic":"8.jpg", "email": "lismore@example.com", "phone": "(234) 555-6789", "parent":5},
+{"key":9, "name":"April Lynn Parris", "title":"Events Mgr", "dept": "Marketing", "pic":"9.jpg", "email": "aparris@example.com", "phone": "(234) 555-6789", "parent":6},
+{"key":10, "name":"Xavier Breath", "title":"Engineering", "dept": "Engineering", "pic":"10.jpg", "email": "xbreath@example.com", "phone": "(234) 555-6789", "parent":4},
+{"key":11, "name":"Anita Hammer", "title":"Process", "dept": "Production", "pic":"11.jpg", "email": "ahammer@example.com", "phone": "(234) 555-6789", "parent":5},
+{"key":12, "name":"Billy Aiken", "title":"Software", "dept": "Engineering", "pic":"12.jpg", "email": "baiken@example.com", "phone": "(234) 555-6789", "parent":10},
+{"key":13, "name":"Stan Wellback", "title":"Testing", "dept": "Engineering", "pic":"13.jpg", "email": "swellback@example.com", "phone": "(234) 555-6789", "parent":10},
+{"key":14, "name":"Marge Innovera", "title":"Hardware", "dept": "Engineering", "pic":"14.jpg", "email": "minnovera@example.com", "phone": "(234) 555-6789", "parent":10},
+{"key":15, "name":"Evan Elpus", "title":"Quality", "dept": "Production", "pic":"15.jpg", "email": "eelpus@example.com", "phone": "(234) 555-6789", "parent":5},
+{"key":16, "name":"Lotta B. Essen", "title":"Sales Rep", "dept": "Sales", "pic":"16.jpg", "email": "lessen@example.com", "phone": "(234) 555-6789", "parent":3}
+ ]
+}
+    </textarea>
   </div>
   <dialog>
     <div style="display: flex; flex-direction: column">

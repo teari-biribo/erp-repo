@@ -5,7 +5,7 @@ public interface IEmployeeService
     Task<EmployeeDto?> GetByIdAsync(int id);
     Task<EmployeeDto> AddAsync(EmployeeDto dto);
     Task<bool> UpdateAsync(EmployeeDto dto);
-    Task<OrgChartDto> GetOrgChartDataAsync();
+    Task<List<NodeDataDto>> GetOrgChartDataAsync();
     Task UpdateEmployeeRoleAsync(int employeeId, int newRoleId);
     Task<bool> DeleteAsync(int id);
 }
