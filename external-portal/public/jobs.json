@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "title": "Senior Systems Engineer - Suva",
+    "company": "Carpenters Fiji PTE Limited",
+    "location": "Carpenters Fiji PTE Limited, Rodwell Road, Suva, Fiji",
+    "logo": "/logo-carpenters-motors.PNG",
+    "type": "Full time",
+    "date": "Sep 16, 2025"
+  },
+  {
+    "id": 2,
+    "title": "Storeman - Suva",
+    "company": "Carpenters Fiji PTE Limited",
+    "location": "Walu Bay, Suva, Fiji",
+    "logo": "/logo-carpenters-motors.PNG",
+    "type": "Full time",
+    "date": "Sep 16, 2025"
+  },
+  {
+    "id": 3,
+    "title": "Cybersecurity Analyst",
+    "company": "Carpenters Fiji PTE Limited",
+    "location": "Carpenters Fiji PTE Limited, Rodwell Road, Suva, Fiji",
+   "logo": "/logo-carpenters-motors.PNG",
+    "type": "Full time",
+    "date": "Sep 18, 2025"
+  }
+]

@@ -1,0 +1,131 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+.full-bleed {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+}
+
+/* Tile style */
+.mvv-tile {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 300px; /* adjust height as needed */
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  padding: 20px;
+}
+
+/* Overlay for readability */
+.mvv-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+/* Content inside each tile */
+.mvv-content {
+  position: relative;
+  text-align: center;
+  max-width: 80%;
+  margin: 0 auto;
+}
+
+/* Titles */
+.mvv-title {
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+}
+
+/* Body text */
+.mvv-text {
+  color: #fff;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* Background images for each tile */
+.mission-bg {
+  background-image: url("/hero/1.jpg");
+}
+.vision-bg {
+  background-image: url("/hero/2.jpg");
+}
+.values-bg {
+  background-image: url("/hero/3.jpg");
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .mvv-tile {
+    height: 220px;
+  }
+  .mvv-title {
+    font-size: 1.4rem;
+  }
+  .mvv-text {
+    font-size: 0.9rem;
+  }
+  /* ===== Global layout for sticky footer ===== */
+html, body, #root, .site-wrapper {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.site-main {
+  flex: 1; /* pushes footer down */
+}
+
+}
