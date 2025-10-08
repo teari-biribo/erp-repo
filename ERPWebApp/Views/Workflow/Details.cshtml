@@ -1,0 +1,39 @@
+@model WorkflowInstance
+
+<h2>@Model.Workflow.Name - Details</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Step</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Comments</th>
+            <th>Action Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var step in Model.Steps.OrderBy(s => s.WorkflowStep.StepOrder))
+        {
+            <tr>
+                <td>@step.WorkflowStep.StepName</td>
+                <td>@step.WorkflowStep.RoleName</td>
+                <td>@step.Status</td>
+                <td>@step.Comments</td>
+                <td>@step.ActionDate?.ToString("g")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<form asp-action="Approve" method="post">
+    <input type="hidden" name="instanceId" value="@Model.Id" />
+    <textarea name="comments" class="form-control" placeholder="Comments..."></textarea>
+    <button type="submit" class="btn btn-success mt-2">Approve</button>
+</form>
+
+<form asp-action="Reject" method="post">
+    <input type="hidden" name="instanceId" value="@Model.Id" />
+    <textarea name="comments" class="form-control" placeholder="Comments..."></textarea>
+    <button type="submit" class="btn btn-danger mt-2">Reject</button>
+</form>

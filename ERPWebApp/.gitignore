@@ -10,7 +10,13 @@
 /migrations
 
 # dotenv files
-.env
+*.env
+
+# appsettings.json
+*.json
+
+#docker compose file
+*.yml
 
 ERPWebApp/bin/Debug/net9.0/ERPWebApp.pdb
 ERPWebApp/obj/Debug/net9.0/ref/ERPWebApp.dll

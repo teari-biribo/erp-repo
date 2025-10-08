@@ -14,49 +14,6 @@ public class EmployeeController : ControllerBase
         _service = service;
     }
 
-    // -------Old Org Chart Method--------
-    // [HttpGet]
-    // public async Task<ActionResult<OrgChartDto>> GetOrgChartData()
-    // {
-    //     // Fetch all employees and their current roles
-    //     var employees = await _dbContext.Employees.Include(e => e.CurrentRole).ToListAsync();
-
-    //     // Fetch all reporting relationships
-    //     var roleReportings = await _dbContext.RoleReportings.ToListAsync();
-
-    //     // Create the NodeDataArray
-    //     var nodeDataArray = new List<NodeDataDto>();
-
-    //     foreach (var employee in employees)
-    //     {
-    //         // Find the role this employee reports to
-    //         var reportsToRoleId = roleReportings
-    //             .FirstOrDefault(rr => rr.DirectReportId == employee.CurrentRoleId)?
-    //             .ReportsToId;
-
-    //         // Find the employee who holds the reporting role
-    //         var parentEmployee = employees
-    //             .FirstOrDefault(e => e.CurrentRoleId == reportsToRoleId);
-
-    //         var nodeData = new NodeDataDto
-    //         {
-    //             Key = employee.EmployeeId,
-    //             Name = $"{employee.FirstName} {employee.LastName}",
-    //             Title = employee.CurrentRole.Title
-    //         };
-
-    //         // Only add the Parent property if a parent employee exists
-    //         if (parentEmployee != null)
-    //         {
-    //             nodeData.Parent = parentEmployee.EmployeeId;
-    //         }
-
-    //         nodeDataArray.Add(nodeData);
-    //     }
-
-    //     return Ok(nodeDataArray);
-    // }
-
     [HttpGet("orgchart")]
     [Authorize]
     public async Task<ActionResult<OrgChartDto>> GetOrgChartData()

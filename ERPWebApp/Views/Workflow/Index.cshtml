@@ -1,0 +1,24 @@
+@model IEnumerable<Workflow>
+<h2>Workflows</h2>
+<a asp-action="Create" class="btn btn-primary mb-3">New Workflow</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Steps</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var w in Model)
+        {
+            <tr>
+                <td>@w.Name</td>
+                <td>@w.Steps.Count</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@w.Id" class="btn btn-sm btn-warning">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

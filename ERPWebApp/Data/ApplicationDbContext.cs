@@ -4,10 +4,6 @@ using Microsoft.EntityFrameworkCore;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {
-    // public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-    // {
-    // }
-
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
 
@@ -18,6 +14,16 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<OrgUnit> OrganizationalUnits { get; set; }
     public DbSet<RoleReporting> RoleReportings { get; set; }
     public DbSet<EmployeeRoleHistory> EmployeeRoleHistory { get; set; }
+
+    //Workflows
+    // public DbSet<Workflow> Workflows => Set<Workflow>();
+    // public DbSet<WorkflowStep> WorkflowSteps => Set<WorkflowStep>();
+    // public DbSet<WorkflowInstance> WorkflowInstances => Set<WorkflowInstance>();
+    // public DbSet<WorkflowInstanceStep> WorkflowInstanceSteps => Set<WorkflowInstanceStep>();
+    public DbSet<Workflow> Workflows { get; set; }
+    public DbSet<WorkflowStep> WorkflowSteps { get; set; }
+    public DbSet<WorkflowInstance> WorkflowInstances { get; set; }
+    public DbSet<WorkflowInstanceStep> WorkflowInstanceSteps { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -86,6 +92,84 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasForeignKey(ou => ou.HRBPId)
             .OnDelete(DeleteBehavior.SetNull);
 
+        // Workflow 
+        modelBuilder.Entity<Workflow>(entity =>
+        {
+            entity.ToTable("Workflows");
+            entity.HasKey(w => w.Id);
+            entity.Property(w => w.Name)
+                    .IsRequired()
+                    .HasMaxLength(200);
+            entity.Property(w => w.Description)
+                    .HasMaxLength(350);
+            entity.HasMany(w => w.Steps)
+                    .WithOne(s => s.Workflow)
+                    .HasForeignKey(s => s.WorkflowId)
+                    .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // WorkflowStep
+        modelBuilder.Entity<WorkflowStep>(entity =>
+        {
+            entity.ToTable("WorkflowSteps");
+            entity.HasKey(s => s.Id);
+            entity.Property(s => s.StepOrder).IsRequired();
+            entity.Property(s => s.StepName)
+                    .IsRequired()
+                    .HasMaxLength(100);
+            entity.Property(s => s.RoleName)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+            // Each step order unique within a workflow
+            entity.HasIndex(s => new { s.WorkflowId, s.StepOrder })
+                    .IsUnique();
+        });
+
+        // WorkflowInstance
+        modelBuilder.Entity<WorkflowInstance>(entity =>
+        {
+            entity.ToTable("WorkflowInstances");
+            entity.HasKey(i => i.Id);
+            entity.Property(i => i.Status)
+                    .IsRequired()
+                    .HasMaxLength(50);
+            entity.Property(i => i.EntityType)
+                    .IsRequired()
+                    .HasMaxLength(100);
+            // entity.Property(i => i.CreatedAt)
+            //         .HasColumnType("timestamp without time zone");
+            entity.HasMany(i => i.Steps)
+                    .WithOne(s => s.WorkflowInstance)
+                    .HasForeignKey(s => s.WorkflowInstanceId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(i => i.Workflow)
+                    .WithMany()
+                    .HasForeignKey(i => i.WorkflowId)
+                    .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        // WorkflowInstanceStep
+        modelBuilder.Entity<WorkflowInstanceStep>(entity =>
+        {
+            entity.ToTable("WorkflowInstanceSteps");
+            entity.HasKey(s => s.Id);
+            entity.Property(s => s.Status)
+                    .IsRequired()
+                    .HasMaxLength(50);
+            entity.Property(s => s.AssignedUserId)
+                    .IsRequired()
+                    .HasMaxLength(450);
+            entity.Property(s => s.Comments)
+                    .HasMaxLength(1000);
+            // entity.Property(i => i.ActionDate)
+            //         .HasColumnType("timestamp without time zone");
+            entity.HasOne(s => s.WorkflowStep)
+                    .WithMany()
+                    .HasForeignKey(s => s.WorkflowStepId)
+                    .OnDelete(DeleteBehavior.Restrict);
+        });
+
         // 1. Seed Organizational Units (without manager assignments)
         modelBuilder.Entity<OrgUnit>().HasData(
             new OrgUnit { UnitId = 1, Name = "Support Functions" },
@@ -114,6 +198,50 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             new Role { RoleId = 15, Title = "Parts Interpreter Suva", OrgUnitId = 5 },
             new Role { RoleId = 16, Title = "Parts Cadet Suva", OrgUnitId = 5 }
         );
+
+        // Seed a sample workflow instance
+        // modelBuilder.Entity<WorkflowInstance>().HasData(
+        //     new WorkflowInstance
+        //     {
+        //         Id = 1,
+        //         WorkflowId = 1, // "Budget Request Approval"
+        //         EntityType = "BudgetApproval",
+        //         EntityId = 1001, // hypothetical Request ID
+        //         Status = "InProgress",
+        //         CreatedAt = new DateTime(2025, 9, 6)
+        //     }
+        // );
+
+        // // Seed workflow instance steps
+        // modelBuilder.Entity<WorkflowInstanceStep>().HasData(
+        //     new WorkflowInstanceStep
+        //     {
+        //         Id = 1,
+        //         WorkflowInstanceId = 1,
+        //         WorkflowStepId = 1, // Supervisor Approval
+        //         AssignedUserId = "2", // Bob Johnson (assuming ApplicationUser.Id matches EmployeeId)
+        //         Status = "Pending",
+        //         Comments = null,
+        //     },
+        //     new WorkflowInstanceStep
+        //     {
+        //         Id = 2,
+        //         WorkflowInstanceId = 1,
+        //         WorkflowStepId = 2, // Department Head Approval
+        //         AssignedUserId = "12", // Laura Hollis
+        //         Status = "NotStarted",
+        //         Comments = null
+        //     },
+        //     new WorkflowInstanceStep
+        //     {
+        //         Id = 3,
+        //         WorkflowInstanceId = 1,
+        //         WorkflowStepId = 3, // Finance Approval
+        //         AssignedUserId = "1", // Alice Smith
+        //         Status = "NotStarted",
+        //         Comments = null
+        //     }
+        // );
 
         // //------MIGRATION 2--------
         // 3. Seed Employees (requires RoleId - ensure orgunits and roles is already seeded)
@@ -167,5 +295,42 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             new EmployeeRoleHistory { EmployeeRoleHistoryId = 15, EmployeeId = 15, RoleId = 15, StartDate = new DateTime(2022, 9, 6) },
             new EmployeeRoleHistory { EmployeeRoleHistoryId = 16, EmployeeId = 16, RoleId = 16, StartDate = new DateTime(2021, 9, 6) }
         );
+
+        // 7. Seed sample workflow and steps
+        // modelBuilder.Entity<Workflow>().HasData(
+        //     new Workflow
+        //     {
+        //         Id = 1,
+        //         Name = "Budget Approval",
+        //         Description = "Approval workflow for budget approval requiring multiple management approvals."
+        //     }
+        // );
+
+        // modelBuilder.Entity<WorkflowStep>().HasData(
+        //     new WorkflowStep
+        //     {
+        //         Id = 1,
+        //         WorkflowId = 1,
+        //         StepOrder = 1,
+        //         StepName = "Supervisor Approval",
+        //         RoleName = "Supervisor West"
+        //     },
+        //     new WorkflowStep
+        //     {
+        //         Id = 2,
+        //         WorkflowId = 1,
+        //         StepOrder = 2,
+        //         StepName = "Department Head Approval",
+        //         RoleName = "National Sales Manager Machinery"
+        //     },
+        //     new WorkflowStep
+        //     {
+        //         Id = 3,
+        //         WorkflowId = 1,
+        //         StepOrder = 3,
+        //         StepName = "Finance Approval",
+        //         RoleName = "Senior IT Officer"
+        //     }
+        // );
     }
 }
