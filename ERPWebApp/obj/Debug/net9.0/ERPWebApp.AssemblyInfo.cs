@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ERPWebApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+968c9f2a5c33e33365b96c1641ac75a28975d0f6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8699ef1d0f42d2e9c5148ecc6f9411bc71bec07e")]
 [assembly: System.Reflection.AssemblyProductAttribute("ERPWebApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ERPWebApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

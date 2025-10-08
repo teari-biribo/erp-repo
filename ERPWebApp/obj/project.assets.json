@@ -2782,19 +2782,19 @@
     ]
   },
   "packageFolders": {
-    "/Users/teari/.nuget/packages/": {}
+    "C:\\Users\\chand\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/teari/Documents/github.nosync/OneCarpentersERP/erp-repo/ERPWebApp/ERPWebApp.csproj",
+      "projectUniqueName": "C:\\Users\\chand\\OneDrive\\Desktop\\Carpenters-Portal\\erp-repo\\ERPWebApp\\ERPWebApp.csproj",
       "projectName": "ERPWebApp",
-      "projectPath": "/Users/teari/Documents/github.nosync/OneCarpentersERP/erp-repo/ERPWebApp/ERPWebApp.csproj",
-      "packagesPath": "/Users/teari/.nuget/packages/",
-      "outputPath": "/Users/teari/Documents/github.nosync/OneCarpentersERP/erp-repo/ERPWebApp/obj/",
+      "projectPath": "C:\\Users\\chand\\OneDrive\\Desktop\\Carpenters-Portal\\erp-repo\\ERPWebApp\\ERPWebApp.csproj",
+      "packagesPath": "C:\\Users\\chand\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\chand\\OneDrive\\Desktop\\Carpenters-Portal\\erp-repo\\ERPWebApp\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/teari/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\chand\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net9.0"
@@ -2854,8 +2854,16 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/9.0.303/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1900",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Error occurred while getting package vulnerability data: Unable to load the service index for source https://api.nuget.org/v3/index.json."
+    }
+  ]
 }
