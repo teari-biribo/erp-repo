@@ -1,0 +1,224 @@
+@* @{
+    ViewData["Title"] = "Create Workflow";
+}
+
+@model WorkflowCreateDto
+
+<h2 class="mb-4">Create New Workflow</h2>
+<form asp-action="Create" method="post" id="workflowForm">
+    <div class="card p-4 shadow-sm">
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label fw-bold"></label>
+            <input asp-for="Name" class="form-control" placeholder="Enter workflow name" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label fw-bold"></label>
+            <textarea asp-for="Description" class="form-control" rows="3"
+                placeholder="Describe this workflow"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <h4 class="mt-4">Approval Steps</h4>
+        <table class="table table-bordered" id="stepsTable">
+            <thead class="table-light">
+                <tr>
+                    <th>Order</th>
+                    <th>Step Name</th>
+                    <th>Role</th>
+                    <th></th>
+                    @* <th>Order</th>
+                    <th>Step Name</th>
+                    <th>Step Type</th>
+                    <th>Role</th>
+                    <th>Final Step?</th>
+                    <th></th> 
+                </tr>
+            </thead>
+            <tbody id="stepsBody"> <!-- Steps added dynamically here --> </tbody>
+        </table>
+        <button type="button" class="btn btn-outline-primary" id="addStepBtn"> <i class="bi bi-plus-circle"></i> Add
+            Step </button>
+        <div class="mt-4 text-end"> <button type="submit" class="btn btn-success px-4"> <i
+                    class="bi bi-check-circle"></i> Save Workflow </button> </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script> 
+        let stepIndex = 0; 
+        document.getElementById('addStepBtn').addEventListener('click', function () 
+        { 
+            const tbody = document.getElementById('stepsBody'); 
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = <td><input name="Steps[${stepIndex}].StepOrder" class="form-control" type="number" min="1" value="${stepIndex + 1}" /></td> 
+                            <td><input name="Steps[${stepIndex}].StepName" class="form-control" type="text" placeholder="Enter step name" /></td> 
+                            <td><input name="Steps[${stepIndex}].RoleName" class="form-control" type="text" placeholder="Enter role name (e.g. Supervisor)" /></td> 
+                            <td><button type="button" class="btn btn-sm btn-danger remove-step-btn">Remove</button></td>; tbody.appendChild(newRow); stepIndex++; 
+                            // Attach remove event newRow.querySelector('.remove-step-btn').addEventListener('click', function () { newRow.remove(); }); }); 
+    </script>
+} *@
+
+@model WorkflowCreateDto
+@{
+    ViewData["Title"] = "Create Workflow";
+}
+
+<h2 class="mb-4">Create New Workflow</h2>
+
+<form asp-action="Create" method="post" id="workflowForm">
+    <div class="card p-4 shadow-sm">
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label fw-bold"></label>
+            <input asp-for="Name" class="form-control" placeholder="Enter workflow name" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label fw-bold"></label>
+            <textarea asp-for="Description" class="form-control" rows="3"
+                placeholder="Describe this workflow"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <h4 class="mt-4">Workflow Steps</h4>
+
+        <table class="table table-bordered align-middle" id="stepsTable">
+            <thead class="table-light">
+                <tr>
+                    <th>Order</th>
+                    <th>Step Name</th>
+                    <th>Step Type</th>
+                    <th>Role</th>
+                    <th>Final Step?</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="stepsBody">
+                <!-- Steps dynamically added -->
+            </tbody>
+        </table>
+
+        <button type="button" class="btn btn-outline-primary" id="addStepBtn">
+            <i class="bi bi-plus-circle"></i> Add Step
+        </button>
+
+        <div class="mt-4 text-end">
+            <button type="submit" class="btn btn-success px-4">
+                <i class="bi bi-check-circle"></i> Save Workflow
+            </button>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let stepIndex = 0;
+            const tbody = document.getElementById('stepsBody');
+            const addStepBtn = document.getElementById('addStepBtn');
+
+            addStepBtn.addEventListener('click', function () {
+                const newRow = document.createElement('tr');
+                newRow.innerHTML = `
+                        <td><input name="Steps[${stepIndex}].StepOrder" class="form-control" type="number" min="1" value="${stepIndex + 1}" /></td>
+                        <td><input name="Steps[${stepIndex}].StepName" class="form-control" type="text" placeholder="Enter step name" /></td>
+                        <td>
+                            <select name="Steps[${stepIndex}].StepType" class="form-select step-type">
+                                <option value="UserTask">User Task</option>
+                                <option value="Approval">Approval</option>
+                                <option value="System">System</option>
+                            </select>
+                        </td>
+                        <td><input name="Steps[${stepIndex}].RoleName" class="form-control role-field" type="text" placeholder="Enter role (e.g. HR Manager)" /></td>
+                        <td class="text-center">
+                            <input type="hidden" name="Steps[${stepIndex}].IsFinalStep" value="false" />
+                            <input type="checkbox" name="Steps[${stepIndex}].IsFinalStep" class="form-check-input" value="true" />
+                        </td>
+                        <td><button type="button" class="btn btn-sm btn-danger remove-step-btn">Remove</button></td>
+                    `;
+
+                tbody.appendChild(newRow);
+                stepIndex++;
+
+                // Auto-hide role field if step type is "System"
+                const stepTypeSelect = newRow.querySelector('.step-type');
+                const roleField = newRow.querySelector('.role-field');
+                stepTypeSelect.addEventListener('change', () => {
+                    if (stepTypeSelect.value === 'System') {
+                        roleField.value = '';
+                        roleField.disabled = true;
+                        roleField.placeholder = 'N/A';
+                    } else {
+                        roleField.disabled = false;
+                        roleField.placeholder = 'Enter role (e.g. HR Manager)';
+                    }
+                });
+
+                // Remove row
+                newRow.querySelector('.remove-step-btn').addEventListener('click', () => {
+                    newRow.remove();
+                    renumberRows();
+                });
+            });
+
+            function renumberRows() {
+                const rows = tbody.querySelectorAll('tr');
+                rows.forEach((row, i) => {
+                    row.querySelectorAll('input, select').forEach(input => {
+                        const name = input.name;
+                        if (name) {
+                            input.name = name.replace(/Steps\[\d+\]/, `Steps[${i}]`);
+                        }
+                    });
+                });
+                stepIndex = rows.length;
+            }
+        });
+        @* let stepIndex = 0;
+        const tbody = document.getElementById('stepsBody');
+
+        document.getElementById('addStepBtn').addEventListener('click', function () {
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                    <td><input name="Steps[${stepIndex}].StepOrder" class="form-control" type="number" min="1" value="${stepIndex + 1}" /></td>
+                    <td><input name="Steps[${stepIndex}].StepName" class="form-control" type="text" placeholder="Enter step name" /></td>
+                    <td>
+                        <select name="Steps[${stepIndex}].StepType" class="form-select step-type">
+                            <option value="UserTask">User Task</option>
+                            <option value="Approval">Approval</option>
+                            <option value="System">System</option>
+                        </select>
+                    </td>
+                    <td><input name="Steps[${stepIndex}].RoleName" class="form-control role-field" type="text" placeholder="Enter role (e.g. HR Manager)" /></td>
+                    <td class="text-center">
+                        <input name="Steps[${stepIndex}].IsFinalStep" class="form-check-input" type="checkbox" />
+                    </td>
+                    <td><button type="button" class="btn btn-sm btn-danger remove-step-btn">Remove</button></td>
+                `;
+
+            tbody.appendChild(newRow);
+            stepIndex++;
+
+            // Auto-hide role field if step type is "System"
+            const stepTypeSelect = newRow.querySelector('.step-type');
+            const roleField = newRow.querySelector('.role-field');
+            stepTypeSelect.addEventListener('change', () => {
+                if (stepTypeSelect.value === 'System') {
+                    roleField.value = '';
+                    roleField.disabled = true;
+                    roleField.placeholder = 'N/A';
+                } else {
+                    roleField.disabled = false;
+                    roleField.placeholder = 'Enter role (e.g. HR Manager)';
+                }
+            });
+
+            // Remove row
+            newRow.querySelector('.remove-step-btn').addEventListener('click', () => {
+                newRow.remove();
+            });
+        }); *@
+    </script>
+}

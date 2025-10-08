@@ -1,0 +1,41 @@
+@model Workflow
+@{
+    ViewData["Title"] = "Edit Workflow";
+}
+
+<h2>Edit Workflow - @Model.Name</h2>
+
+<a asp-action="AddStep" asp-route-workflowId="@Model.Id" class="btn btn-primary mb-3">
+    Add Step
+</a>
+
+<table class="table table-bordered align-middle">
+    <thead class="table-light">
+        <tr>
+            <th>Order</th>
+            <th>Step Name</th>
+            <th>Type</th>
+            <th>Role</th>
+            <th>Final Step?</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var step in Model.Steps.OrderBy(s => s.StepOrder))
+        {
+            <tr>
+                <td>@step.StepOrder</td>
+                <td>@step.StepName</td>
+                <td>@step.StepType</td>
+                <td>@step.RoleName</td>
+                <td>@(step.IsFinalStep ? "✅ Yes" : "—")</td>
+                <td>
+                    <form asp-action="DeleteStep" method="post" class="d-inline">
+                        <input type="hidden" name="id" value="@step.Id" />
+                        <button class="btn btn-sm btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

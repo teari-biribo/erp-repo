@@ -1,0 +1,32 @@
+@{
+    ViewData["Title"] = "My Approvals Page";
+}
+
+@model IEnumerable<WorkflowInstanceStep>
+
+<h2>My Pending Approvals</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Workflow</th>
+            <th>Step</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var step in Model)
+        {
+            <tr>
+                <td>@step.WorkflowInstance.Workflow.Name</td>
+                <td>@step.WorkflowStep.StepName</td>
+                <td>@step.Status</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@step.WorkflowInstanceId" class="btn btn-sm btn-primary">
+                        View Details
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
